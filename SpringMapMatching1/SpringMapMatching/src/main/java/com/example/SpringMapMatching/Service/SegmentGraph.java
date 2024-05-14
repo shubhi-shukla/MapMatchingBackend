@@ -8,20 +8,17 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component
 public class SegmentGraph {
 
     @Autowired
-    private Data data; // Autowire your Data repository
+    private Data data;
 
-    private static Graph<Integer, DefaultEdge> graph; // Declare graph as a field
-
+    private static Graph<Integer, DefaultEdge> graph;
     @PostConstruct
     public void init() {
-        // Initialize and build the graph once during startup
         graph = buildSegmentGraph();
 //        System.out.println("SEGMENT GRAPH CREATED");
 //        printVertexCount();
@@ -32,7 +29,6 @@ public class SegmentGraph {
     }
 
     public Graph<Integer, DefaultEdge> buildSegmentGraph() {
-        // Create an undirected graph
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         // Fetch road segments data using your Data repository

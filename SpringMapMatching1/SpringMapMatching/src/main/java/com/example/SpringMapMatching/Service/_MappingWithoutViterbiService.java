@@ -4,31 +4,25 @@ import com.example.SpringMapMatching.Database.Data;
 import com.example.SpringMapMatching.Database.LocationNavPath;
 import com.example.SpringMapMatching.Model.Point;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Service
 public class _MappingWithoutViterbiService {
 
 
     private Data data; // Autowire your Data repository
-
-    @Autowired
-    public _MappingWithoutViterbiService(Data data){
-        this.data = data;
-    }
-
-    @Autowired
     private RoadGraph roadGraph;
+    private SegmentGraph segmentGraph;
 
     @Autowired
-    private SegmentGraph segmentGraph;
-//    @Autowired
-//    public static SegmentGraph segmentGraph;
-
-    //public static int most_likely_path = -1;
+    public _MappingWithoutViterbiService(Data data, RoadGraph roadGraph, SegmentGraph segmentGraph){
+        this.data = data;
+        this.roadGraph = roadGraph;
+        this.segmentGraph = segmentGraph;
+    }
 
     public Point mapping(List<Double> currObs, Map<Integer, List<List<Double>>> segmentMapping) {
         List<LocationNavPath> nearestSegment = data.findByLocationNear(currObs.get(0), currObs.get(1), 100); // Adjust max distance as needed
