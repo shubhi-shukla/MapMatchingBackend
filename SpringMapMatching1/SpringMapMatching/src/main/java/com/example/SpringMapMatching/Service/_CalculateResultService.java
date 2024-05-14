@@ -2,11 +2,11 @@ package com.example.SpringMapMatching.Service;
 
 import com.example.SpringMapMatching.Model.Point;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Component
+@Service
 public class _CalculateResultService {
     static Map<Integer, Integer> stateToSegmentID = new HashMap<>();
 
