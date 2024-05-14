@@ -8,20 +8,17 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component
 public class SegmentGraph {
 
     @Autowired
-    private Data data; // Autowire your Data repository
+    private Data data;
 
-    private static Graph<Integer, DefaultEdge> graph; // Declare graph as a field
-
+    private static Graph<Integer, DefaultEdge> graph;
     @PostConstruct
     public void init() {
-        // Initialize and build the graph once during startup
         graph = buildSegmentGraph();
 //        System.out.println("SEGMENT GRAPH CREATED");
 //        printVertexCount();
@@ -32,7 +29,6 @@ public class SegmentGraph {
     }
 
     public Graph<Integer, DefaultEdge> buildSegmentGraph() {
-        // Create an undirected graph
         Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         // Fetch road segments data using your Data repository
@@ -55,8 +51,10 @@ public class SegmentGraph {
                     List<List<Double>> road2Coordinates = roadSegments.get(j).getGeo().getCoordinates();
                     int segment2ID = roadSegments.get(j).getH_ID();
 
-                    for (List<Double> coord1 : road1Coordinates) {
-                        for (List<Double> coord2 : road2Coordinates) {
+                    for (int x = 0; x < road1Coordinates.size(); x += road1Coordinates.size() - 1) {
+                        List<Double> coord1 = road1Coordinates.get(x);
+                        for (int y = 0; y < road2Coordinates.size(); y += road2Coordinates.size() - 1) {
+                            List<Double> coord2 = road2Coordinates.get(y);
                             if (coord1.get(0).equals(coord2.get(0)) && coord1.get(1).equals(coord2.get(1))) {
                                 if (segment1ID != segment2ID) {
                                     graph.addEdge(segment1ID, segment2ID);
@@ -68,6 +66,8 @@ public class SegmentGraph {
             }
         }
 
+        System.out.println(graph.vertexSet().size());
+        System.out.println("segment graph made");
         return graph;
     }
 

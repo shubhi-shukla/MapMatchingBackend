@@ -49,7 +49,7 @@ public class _ConnectionOrIntersectionService {
         List<Double> road2End = road2Coordinates.get(road2Coordinates.size() - 1);
 
         if ((road1Start.get(0).equals(road2Start.get(0))) && (road1Start.get(1).equals(road2Start.get(1)))){
-            if (roadGraph.getRoadGraph().degreeOf(road1Start.get(0) + "#" + road1Start.get(1)) >= 4) {
+            if (roadGraph.getRoadGraph().degreeOf(road1Start.get(0) + "#" + road1Start.get(1)) >= 3) {
                 return true;
             }
         }

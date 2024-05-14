@@ -4,13 +4,16 @@ import com.example.SpringMapMatching.Database.Data;
 import com.example.SpringMapMatching.Database.LocationNavPath;
 import com.example.SpringMapMatching.Model.Point;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.example.SpringMapMatching.Service._NewViterbiService.nearbySegments;
 
-@Component
+@Service
 public class _NearestThingsService {
     private final Data data;
 

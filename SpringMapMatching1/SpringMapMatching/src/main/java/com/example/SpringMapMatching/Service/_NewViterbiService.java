@@ -4,7 +4,7 @@ import com.example.SpringMapMatching.Database.Data;
 import com.example.SpringMapMatching.Database.LocationNavPath;
 import com.example.SpringMapMatching.Model.Point;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,10 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 
-@Component
+@Service
 public class _NewViterbiService {
 
     private Data data;
+    private final _MappingWithoutViterbiService mappingWithoutViterbi;
+    private final _ApplyViterbiService applyViterbi;
 
     @Autowired
     public _NewViterbiService(Data data, _MappingWithoutViterbiService mappingWithoutViterbi, _ApplyViterbiService applyViterbi){
@@ -24,17 +26,14 @@ public class _NewViterbiService {
         this.applyViterbi = applyViterbi;
     }
 
-    @Autowired
-    private final _MappingWithoutViterbiService mappingWithoutViterbi;
-
-    @Autowired
-    private final _ApplyViterbiService applyViterbi;
 
     static Map<Integer, List<List<Double>>> segmentMapping = new HashMap<>();
     static List<LocationNavPath> segmentsMap = new ArrayList<>();
 
     public static ArrayList<ArrayList<Integer>> nearbySegments = new ArrayList<>();
     public static boolean checkIntersectionInsideWindow = false;
+    public static boolean checkWindowExtention = false;
+    public static int extendedWindow = 15;
 
     public static boolean isBeginning = true;
     public static boolean isIntersection = false;
@@ -66,12 +65,25 @@ public class _NewViterbiService {
             printResult(mappedPoints);
             totalPoints.addAll(mappedPoints);
             isBeginning = false;
+            if(checkIntersectionInsideWindow){
+                isIntersection = true;
+            }
+            else{
+                isIntersection = false;
+            }
             return mappedPoints;
         } else {
             if(isIntersection){
                 mappedPoints = applyViterbi.applyViterbi(gpsCoordinates);
-                isIntersection = false;
-                printResult(mappedPoints);
+                if(checkIntersectionInsideWindow || checkWindowExtention){
+                    isIntersection = true;
+                }
+                else{
+                    isIntersection = false;
+                }
+                if(mappedPoints != null){
+                    printResult(mappedPoints);
+                }
                 return mappedPoints;
             }
             else{
