@@ -32,6 +32,8 @@ public class _NewViterbiService {
 
     public static ArrayList<ArrayList<Integer>> nearbySegments = new ArrayList<>();
     public static boolean checkIntersectionInsideWindow = false;
+    public static boolean checkWindowExtention = false;
+    public static int extendedWindow = 15;
 
     public static boolean isBeginning = true;
     public static boolean isIntersection = false;
@@ -63,12 +65,25 @@ public class _NewViterbiService {
             printResult(mappedPoints);
             totalPoints.addAll(mappedPoints);
             isBeginning = false;
+            if(checkIntersectionInsideWindow){
+                isIntersection = true;
+            }
+            else{
+                isIntersection = false;
+            }
             return mappedPoints;
         } else {
             if(isIntersection){
                 mappedPoints = applyViterbi.applyViterbi(gpsCoordinates);
-                isIntersection = false;
-                printResult(mappedPoints);
+                if(checkIntersectionInsideWindow || checkWindowExtention){
+                    isIntersection = true;
+                }
+                else{
+                    isIntersection = false;
+                }
+                if(mappedPoints != null){
+                    printResult(mappedPoints);
+                }
                 return mappedPoints;
             }
             else{

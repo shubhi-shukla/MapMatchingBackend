@@ -40,10 +40,17 @@ public class ViterbiController {
 
         if(_NewViterbiService.isBeginning){
             observations.add(gpsCoordinates);
-            if(observations.size() == 5){
+            if(observations.size() == 15){
                result.addAll(viterbiService.process(observations));
-
-               observations.clear();
+                if(!_NewViterbiService.checkIntersectionInsideWindow)
+                {
+                    observations.clear();
+                }
+                else{
+                    System.out.println("AA " + _NewViterbiService.isIntersection);
+                    observations.subList(0, _NewViterbiService.makeWindow).clear();
+                    System.out.println("BB : " + observations.size());
+                }
                return result;
             }
             else{
@@ -53,14 +60,46 @@ public class ViterbiController {
         else{
             if(_NewViterbiService.isIntersection){
                 observations.add(gpsCoordinates);
-                if(observations.size() == 5){
-                    result.addAll(viterbiService.process(observations));
-                    observations.clear();
-                    return result;
+                System.out.println("--" + observations.size() + " " +_NewViterbiService.extendedWindow);
+
+                if(observations.size() == _NewViterbiService.extendedWindow){
+                    List<Point> newResult = viterbiService.process(observations);
+
+                    if(newResult != null){
+                        _NewViterbiService.isIntersection = false;
+                        result.addAll(newResult);
+
+                        if(!_NewViterbiService.checkIntersectionInsideWindow)
+                        {
+                            observations.clear();
+                        }
+                        else{
+                            observations.subList(0, _NewViterbiService.makeWindow).clear();
+                        }
+                        return result;
+                    }
+                    else{
+                        return result;
+                    }
                 }
                 else{
                     return result;
                 }
+//                if(observations.size() == 8){
+//
+//                    result.addAll(viterbiService.process(observations));
+//                    if(!_NewViterbiService.checkIntersectionInsideWindow)
+//                    {
+//                        observations.clear();
+//                    }
+//                    else{
+//                        observations.subList(0, _NewViterbiService.makeWindow).clear();
+//                    }
+//                    return result;
+//                }
+//                else{
+//                    return result;
+//                }
             }
             else{
                 System.out.println(gpsCoordinates[0] + " " + gpsCoordinates[1]);
@@ -121,6 +160,10 @@ public class ViterbiController {
             _NewViterbiService.isBeginning = true;
             _NewViterbiService.most_likely_path = -1;
             result.clear();
+            _NewViterbiService.checkWindowExtention = false;
+            _NewViterbiService.checkIntersectionInsideWindow = false;
+            _NewViterbiService.extendedWindow = 15;
+            observations.clear();
             response.put("message", "Data cleared successfully");
             return ResponseEntity.ok(response);
         } else {
