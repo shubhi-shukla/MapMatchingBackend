@@ -10,7 +10,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.List;
 
 @SpringBootApplication
-public class SpringMapMatchingApplication implements CommandLineRunner {
+public class
+
+
+
+SpringMapMatchingApplication implements CommandLineRunner {
 	@Autowired
 	private Data dataRepository ;
 

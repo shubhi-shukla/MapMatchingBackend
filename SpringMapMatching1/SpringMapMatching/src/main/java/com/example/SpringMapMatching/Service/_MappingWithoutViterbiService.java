@@ -56,7 +56,7 @@ public class _MappingWithoutViterbiService {
                 }
             }
         }
-        return null
+        return null ;
     }
 
     private static Point findNearestPointFromRoad(Point p, List<List<Double>> roadSegment) {
